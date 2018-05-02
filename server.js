@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var Produto = require('./app/models/produto');
 
 //usando o MLAB
-mongoose.connect('mongodb://Fabinho Flauzino:123456f@ds050739.mlab.com:50739/banco1?authSource=yourDB&w=1');
+mongoose.connect('mongodb://Fabinho Flauzino:123456f@ds050739.mlab.com:50739');
 
 //definindo a porta onde o servidor vai responder
 var port = process.env.port || 8000; // se estiver algum arquivo de conf de porta fora usa um se nao tiver usa a 8000
