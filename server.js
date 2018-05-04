@@ -11,14 +11,21 @@ app.use(bodyParser.json());
 var mongoose = require('mongoose');
 var Produto = require('./app/models/produto');
 
-//usando o MLAB
-mongoose.connect('mongodb://Fabinho Flauzino:123456f@ds050739.mlab.com:50739/banco1');
+//usando o Banco local
+mongoose.connect('mongodb://localhost/bdCrud');
+
 
 //definindo a porta onde o servidor vai responder
 var port = process.env.port || 8000; // se estiver algum arquivo de conf de porta fora usa um se nao tiver usa a 8000
 
 //definido a rota
 var router = express.Router(); //Interpreta todas as rotas
+
+//MIDDLEWARE
+router.use(function(req,res,next){
+    console.log("Interceptação pelo Middleware OK");
+    next();
+});
 
 router.get('/', function(req, res){
     res.json({'message':'OK, rota principal está funcionando'});
@@ -36,9 +43,22 @@ router.route('/produtos')
             if(error)
                 res.send("Erro ao tentar incluir um novo produto " + error);
 
-            res.json({message:"Produto inserido com sucesso."});
+            res.status(201).json({message:"Produto inserido com sucesso."});
         });
+   })
+
+        .get(function(req, res){
+            Produto.find(function(err, prods){
+                if(err)
+                    res.send(err);
+                
+                res.status(200).json({
+                    message:"Retorno de todos os produtos",
+                    todosProdutos:prods
+                });
+            });
 });
+
 
 //vincular a app com o motor de rotas
 //para esta aplição vamos criar um caminho padrão para as APIs REST

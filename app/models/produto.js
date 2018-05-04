@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+//import { Schema, model } from 'mongoose';
 
 /* 
     Arquivo de model para produto
@@ -7,10 +7,10 @@ import { Schema, model } from 'mongoose';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var ProdutoSchema = new Schema({
+var produtoSchema = new Schema({
     nome: String,
     preco: Number,
     descricao: String
 });
 
-module.exports = mongoose.model('Produto', ProdutoSchema);
+module.exports = mongoose.model('Produto', produtoSchema);
