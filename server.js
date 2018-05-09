@@ -31,6 +31,69 @@ router.get('/', function(req, res){
     res.json({'message':'OK, rota principal está funcionando'});
 });
 
+//GetById
+router.route('/produtos/:produtoId')
+.get(function(req,res){
+    const id = req.params.produtoId;
+
+    Produto.findById(id,function(err,produto){
+        if(err){
+            res.status(500).json({
+                message:"Erro ao tentar encontrar produto, ID mal formado"
+            });
+        }
+        else if(produto ==null){
+            res.status(400).json({
+                message:"produto não encontrado"
+            });
+        }else{
+            res.status(200).json({
+                message:"Produto Encontrado",
+                produto : produto
+            });
+        }
+    });
+})
+.put(function(req,res){
+    const id = req.params.produtoId;
+    Produto.findById(id, function(err,produto){
+        if(err){
+            res.status(500).json({
+                message:"Id mal formado, erro ao tentar encontrar produto"
+            });
+        }
+        else if(produto == null){
+            res.status(400).json({
+                message:"Produto não encontrado"
+            });
+        }
+        else{
+            produto.nome = req.body.nome;
+            produto.preco = req.body.preco;
+            produto.descricao = req.body.descricao;
+
+            produto.save(function(error){
+                if(error)
+                    res.send("Erro ao tentar atualizar o produto "+ error);
+
+                    res.status(200).json({message:"produto atualizado com sucesso"});
+            });
+        }
+    });
+
+})
+.delete(function(req,res){
+    Produto.findByIdAndRemove(req.params.produtoId, (err,produto)=>{
+        if(err) return res.status(500).send(err);
+
+        const response = {
+            message : "Produto removido com sucesso",
+            id : produto.id
+        };
+        return res.status(200).send(response);
+    });
+});
+
 //Criando uma rota padrão para produto, tudo que for api/produto cai aqui
 router.route('/produtos')
     .post(function(req,res){
